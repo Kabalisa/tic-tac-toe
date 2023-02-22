@@ -2,6 +2,7 @@ import express, { Express } from "express";
 import "express-async-errors";
 import { json } from "body-parser";
 import dotenv from "dotenv";
+import cors from "cors";
 
 import { errorHandler } from "./middlewares";
 import { NotFoundError } from "./errors";
@@ -10,6 +11,7 @@ import { playRouter } from "./routes/play";
 dotenv.config();
 
 const app: Express = express();
+app.use(cors());
 app.set("trust proxy", true);
 app.use(json());
 
