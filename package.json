@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node dist/index.js",
     "dev": "ts-node-dev --poll src/index.ts",
-    "postinstall": "tsc"
+    "postinstall": "tsc src/*.ts --outDir ./dist --esModuleInterop true"
   },
   "keywords": [],
   "author": "",
