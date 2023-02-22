@@ -28,7 +28,11 @@ class PlayController {
       tie = isTie(board.toString());
     }
 
-    return res.send({ board, winner, tie });
+    return res.send({
+      board: board.toString().replaceAll(" ", "+"),
+      winner,
+      tie,
+    });
   }
 }
 
