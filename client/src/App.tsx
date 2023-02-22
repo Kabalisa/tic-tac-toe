@@ -15,36 +15,81 @@ const App = () => {
 
   const formattedBoard = board.split("");
 
-  const handlePlay = async () => {
+  const handlePlay = async (board: string) => {
     try {
       setIsLoading(true);
-      const result = await playGame(board);
-      console.log("==>>>result", result);
+      const { data } = await playGame(board);
+      setBoard(data.board);
+      setWinner(data.winner);
+      setTie(data.tie);
+      setPlayer("x");
+      setIsLoading(false);
     } catch (error) {
       setIsLoading(false);
     }
   };
 
+  const nexMove = (board: string, index: number) => {
+    const newBoard = replace(board, index);
+    setBoard(newBoard);
+    setPlayer("o");
+    handlePlay(newBoard);
+  };
+
+  const handleRestart = () => {
+    setBoard("+++++++++");
+    setWinner(null);
+    setTie(false);
+    const newPlayer = computePlayer();
+    setPlayer(newPlayer);
+    if (newPlayer === "o") {
+      handlePlay("+++++++++");
+    }
+  };
+
   useEffect(() => {
-    handlePlay();
+    if (player === "o") {
+      handlePlay(board);
+    }
   }, []);
 
   return (
     <div className="App">
       <header className="App-header">Tic-Tac-Toe Game</header>
-      <div className="player-container">
-        <span>The current player is: </span>
-        <span>{player}</span>
-      </div>
-      <div className="board-wrapper">
+      {!winner && !tie && (
+        <div className="player-container">
+          <span>The current player is: </span>
+          <span>{player}</span>
+        </div>
+      )}
+      <div
+        className={`board-wrapper ${
+          winner || tie || isLoading ? "disabled" : ""
+        }`}
+      >
         <div className="board-container">
           {formattedBoard.map((el, i) => (
-            <button className="board-button" key={i}>
-              x
+            <button
+              className="board-button"
+              key={i}
+              disabled={el !== "+"}
+              onClick={() => nexMove(board, i)}
+            >
+              {el === "+" ? null : el}
             </button>
           ))}
         </div>
       </div>
+      {winner || tie ? (
+        <div className="game-results">
+          <h2>Game Over</h2>
+          {winner && <span>Player {winner} Win. Restart to play again</span>}
+          {tie && <span>It's a tie. Restart to play again</span>}
+          <button className="restart-game" onClick={handleRestart}>
+            Restart
+          </button>
+        </div>
+      ) : null}
     </div>
   );
 };
