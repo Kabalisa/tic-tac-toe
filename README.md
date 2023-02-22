@@ -20,3 +20,5 @@ an API that plays the game called tic-tac-toe in the US, and called naughts and 
 - cd tic-tac-toe && npm i
 - npm run dev
 - you can then see the app at http://localhost:3000
+
+you can play the game here. https://kabalisa-tic-tac-toe.netlify.app/
